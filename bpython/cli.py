@@ -1673,12 +1673,20 @@ def init_wins(scr, config):
     # Thanks to Angus Gibson for pointing out this missing line which was causing
     # problems that needed dirty hackery to fix. :)
 
+    menu_string = ''
+    for name, key in (
+        ('Rewind', config.undo_key),
+        ('Save', config.save_key),
+        ('Pastebin', config.pastebin_key),
+        ('Pager', config.last_output_key),
+        ('Show Source', config.show_source_key)
+    ):
+        if key:
+            menu_string += ' <%s> %s ' % (key, name)
+
     statusbar = Statusbar(scr, main_win, background, config,
-        _(" <%s> Rewind  <%s> Save  <%s> Pastebin "
-          " <%s> Pager  <%s> Show Source ") %
-          (config.undo_key, config.save_key, config.pastebin_key,
-           config.last_output_key, config.show_source_key),
-            get_colpair(config, 'main'))
+                          menu_string,
+                          get_colpair(config, 'main'))
 
     return main_win, statusbar
 

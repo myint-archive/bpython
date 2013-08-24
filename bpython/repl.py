@@ -889,7 +889,7 @@ class Repl(object):
                         self.config.hist_length)
                 except EnvironmentError as err:
                     self.interact.notify(
-                        'Error occured while writing to file %s (%s) ' %
+                        'Error occurred while writing to file %s (%s) ' %
                         (histfilename, err.strerror))
                     self.rl_history.entries = oldhistory
                     self.rl_history.append(s)
@@ -1031,7 +1031,7 @@ class Repl(object):
     def clear_current_line(self):
         """This is used as the exception callback for the Interpreter instance.
 
-        It prevents autoindentation from occuring after a traceback.
+        It prevents autoindentation from occurring after a traceback.
 
         """
 

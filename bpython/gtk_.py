@@ -721,7 +721,7 @@ class ReplWidget(gtk.TextView, repl.Repl):
 
     def writetb(self, lines):
         with ExceptionManager(ExceptionDialog,
-                              'An error occured while trying to display '
+                              'An error occurred while trying to display '
                               'an error. Please contact the bpython '
                               'developers.'):
             string = ''.join(lines)

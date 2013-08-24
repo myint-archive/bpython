@@ -249,7 +249,7 @@ class Statusbar(object):
         """Prompt the user for some input (with the optional prompt 's').
 
         After the user hit enter the signal 'prompt_result' will be
-        emited and the status bar will be reset. If single is True, the
+        emitted and the status bar will be reset. If single is True, the
         first keypress will be returned.
 
         """

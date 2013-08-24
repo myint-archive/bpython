@@ -50,7 +50,7 @@ msgstr "si"
 
 #: bpython/cli.py:970 bpython/gtk_.py:484
 msgid "Cannot show source."
-msgstr "Non è possibile mostrare il codice sorgente"
+msgstr "Non è possible mostrare il codice sorgente"
 
 #: bpython/cli.py:1642 bpython/urwid.py:612
 #, python-format

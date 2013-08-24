@@ -144,41 +144,39 @@ for language in os.listdir(translations_dir):
     if os.path.exists(os.path.join(translations_dir, mo_subpath)):
         mo_files.append(mo_subpath)
 
-setup(
-    name='bpython',
-    version=__version__,
-    author='Bob Farrell, Andreas Stuehrk et al.',
-    author_email='robertanthonyfarrell@gmail.com',
-    description='Fancy Interface to the Python Interpreter',
-    license='MIT/X',
-    url='http://www.bpython-interpreter.org/',
-    long_description="""bpython is a fancy interface to the Python
-    interpreter for Unix-like operating systems.""",
-    install_requires=[
-        'pygments'
-    ],
-    tests_require=['mock'],
-    packages=['bpython', 'bpython.test', 'bpython.translations', 'bpdb'],
-    data_files=data_files,
-    package_data={
-        'bpython': ['logo.png'],
-        'bpython.translations': mo_files,
-        'bpython.test': ['test.config', 'test.theme']
-    },
-    entry_points={
-        'console_scripts': [
-            'bpython = bpython.cli:main',
-            'bpython-urwid = bpython.urwid:main',
+with open('README.rst') as readme:
+    setup(
+        name='bpython',
+        version=__version__,
+        author='Bob Farrell, Andreas Stuehrk et al.',
+        author_email='robertanthonyfarrell@gmail.com',
+        description='Fancy Interface to the Python Interpreter',
+        license='MIT/X',
+        url='http://www.bpython-interpreter.org/',
+        long_description=readme.read(),
+        install_requires=[
+            'pygments'
         ],
-        'gui_scripts': [
-            'bpython-gtk = bpython.gtk_:main'
-        ]
-    },
-    scripts=([] if using_setuptools else ['data/bpython',
-                                          'data/bpython-gtk',
-                                          'data/bpython-urwid']),
-    cmdclass = cmdclass,
-    test_suite = 'bpython.test'
-)
-
-# vim: fileencoding=utf-8 sw=4 ts=4 sts=4 ai et sta
+        tests_require=['mock'],
+        packages=['bpython', 'bpython.test', 'bpython.translations', 'bpdb'],
+        data_files=data_files,
+        package_data={
+            'bpython': ['logo.png'],
+            'bpython.translations': mo_files,
+            'bpython.test': ['test.config', 'test.theme']
+        },
+        entry_points={
+            'console_scripts': [
+                'bpython = bpython.cli:main',
+                'bpython-urwid = bpython.urwid:main',
+            ],
+            'gui_scripts': [
+                'bpython-gtk = bpython.gtk_:main'
+            ]
+        },
+        scripts=([] if using_setuptools else ['data/bpython',
+                                              'data/bpython-gtk',
+                                              'data/bpython-urwid']),
+        cmdclass=cmdclass,
+        test_suite='bpython.test'
+    )

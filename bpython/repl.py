@@ -21,6 +21,8 @@
 # THE SOFTWARE.
 #
 
+
+from __future__ import absolute_import
 from __future__ import with_statement
 import code
 import codecs
@@ -38,9 +40,15 @@ from itertools import takewhile
 from locale import getpreferredencoding
 from socket import error as SocketError
 from string import Template
-from urllib import quote as urlquote
-from urlparse import urlparse
-from xmlrpclib import ServerProxy, Error as XMLRPCError
+
+try:
+    from urllib import quote as urlquote
+    from urlparse import urlparse
+    from xmlrpclib import ServerProxy, Error as XMLRPCError
+except ImportError:
+    from urllib.parse import quote as urlquote
+    from urllib.parse import urlparse
+    from xmlrpc.client import ServerProxy, Error as XMLRPCError
 
 from pygments.token import Token
 
@@ -60,6 +68,12 @@ try:
     has_abc = True
 except (ImportError, AttributeError):
     has_abc = False
+
+
+try:
+    basestring
+except NameError:
+    basestring = str
 
 
 class Interpreter(code.InteractiveInterpreter):
@@ -279,8 +293,11 @@ class MatchesIterator(object):
         self.matches = list(matches)
         self.index = -1
 
-    def __nonzero__(self):
+    def __bool__(self):
         return self.index != -1
+
+    def __nonzero__(self):
+        return self.__bool__()
 
     def __iter__(self):
         return self
@@ -290,9 +307,12 @@ class MatchesIterator(object):
             raise ValueError('No current match.')
         return self.matches[self.index]
 
-    def next(self):
+    def __next__(self):
         self.index = (self.index + 1) % len(self.matches)
         return self.matches[self.index]
+
+    def next(self):
+        return self.__next__()
 
     def previous(self):
         if self.index <= 0:
@@ -759,7 +779,7 @@ class Repl(object):
         """Upload to pastebin via XML-RPC."""
         try:
             pasteservice = ServerProxy(self.config.pastebin_url)
-        except IOError, e:
+        except IOError as e:
             self.interact.notify(_("Pastebin error for URL '%s': %s") %
                                  (self.config.pastebin_url, str(e)))
             return
@@ -768,7 +788,7 @@ class Repl(object):
         try:
             paste_id = pasteservice.pastes.newPaste('pycon', s, '', '', '',
                    self.config.pastebin_private)
-        except (SocketError, XMLRPCError), e:
+        except (SocketError, XMLRPCError) as e:
             self.interact.notify(_('Upload failed: %s') % (str(e), ) )
             return
 
@@ -793,7 +813,7 @@ class Repl(object):
             helper.stdin.write(s.encode(getpreferredencoding()))
             output = helper.communicate()[0].decode(getpreferredencoding())
             paste_url = output.split()[0]
-        except OSError, e:
+        except OSError as e:
             if e.errno == errno.ENOENT:
                 self.interact.notify(_('Upload failed: '
                                        'Helper program not found.'))
@@ -841,7 +861,7 @@ class Repl(object):
                 self.rl_history.append(s)
                 try:
                     self.rl_history.save(histfilename, getpreferredencoding(), self.config.hist_length)
-                except EnvironmentError, err:
+                except EnvironmentError as err:
                     self.interact.notify("Error occured while writing to file %s (%s) " % (histfilename, err.strerror))
                     self.rl_history.entries = oldhistory
                     self.rl_history.append(s)
@@ -1036,7 +1056,7 @@ def token_is(token_type):
 def token_is_any_of(token_types):
     """Return a callable object that returns whether a token is any of the
     given types `token_types`."""
-    is_token_types = map(token_is, token_types)
+    is_token_types = list(map(token_is, token_types))
 
     def token_is_any_of(token):
         return any(check(token) for check in is_token_types)

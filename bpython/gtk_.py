@@ -27,6 +27,8 @@
 # the future to avoid that, but people are stupid and add the package path
 # to sys.path.
 
+
+from __future__ import absolute_import
 from __future__ import with_statement
 import inspect
 import optparse
@@ -50,7 +52,7 @@ _COLORS = dict(b='blue', c='cyan', g='green', m='magenta', r='red',
 
 def add_tags_to_buffer(color_scheme, text_buffer):
     tags = dict()
-    for (name, value) in color_scheme.iteritems():
+    for (name, value) in color_scheme.items():
         tag = tags[name] = text_buffer.create_tag(name)
         for (char, prop) in zip(value, ['foreground', 'background']):
             if char.lower() == 'd':
@@ -138,6 +140,9 @@ class Nested(object):
 
     def __exit__(self, exc_type, exc_value, exc_tb):
         self.counter -= 1
+
+    def __bool__(self):
+        return bool(self.counter)
 
     def __nonzero__(self):
         return bool(self.counter)
@@ -695,7 +700,7 @@ class ReplWidget(gtk.TextView, repl.Repl):
         self.highlight_current_line()
         try:
             return self.push(line + '\n')
-        except SystemExit, e:
+        except SystemExit as e:
             self.exit_value = e.args
             self.emit('exit-event')
             return False
@@ -758,7 +763,7 @@ def show_source_in_new_window(source, color_scheme=None, highlight=True):
 
 def init_import_completion():
     try:
-        importcompletion.find_iterator.next()
+        next(importcompletion.find_iterator)
     except StopIteration:
         return False
     else:

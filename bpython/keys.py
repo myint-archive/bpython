@@ -21,6 +21,8 @@
 # THE SOFTWARE.
 #
 
+
+from __future__ import absolute_import
 import string
 
 
@@ -65,8 +67,8 @@ cli_key_dispatch['C-^'] = (chr(30), '^^')
 cli_key_dispatch['C-_'] = (chr(31), '^_')
 
 # fill dispatch with function keys
-for x in xrange(1, 13):
+for x in range(1, 13):
     cli_key_dispatch['F%s' % str(x)] = ('KEY_F(%s)' % str(x),)
 
-for x in xrange(1, 13):
+for x in range(1, 13):
     urwid_key_dispatch['F%s' % str(x)] = 'f%s' % str(x)

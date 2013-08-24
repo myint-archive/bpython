@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import fcntl
 import os
 import pty
@@ -35,7 +36,7 @@ class CrashersTest(object):
         result = Deferred()
 
         class Protocol(ProcessProtocol):
-            STATES = (SEND_INPUT, COLLECT) = xrange(2)
+            STATES = (SEND_INPUT, COLLECT) = range(2)
 
             def __init__(self):
                 self.data = ""

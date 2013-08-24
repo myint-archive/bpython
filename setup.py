@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 
+
+from __future__ import absolute_import
 import os
 import platform
 
@@ -18,10 +20,7 @@ except ImportError:
     from distutils.command.install import install as _install
     using_setuptools = False
 
-try:
-    from distutils.command.build_py import build_py_2to3 as build_py
-except ImportError:
-    from distutils.command.build_py import build_py
+from distutils.command.build_py import build_py
 
 try:
     from babel.messages.frontend import compile_catalog as _compile_catalog

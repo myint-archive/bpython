@@ -21,9 +21,17 @@
 # THE SOFTWARE.
 #
 
-import __builtin__
+
+from __future__ import absolute_import
+
+try:
+    import builtins
+except ImportError:
+    import __builtin__ as builtins
+
 import rlcompleter
 import re
+
 from bpython import inspection
 
 # Needed for special handling of __abstractmethods__
@@ -114,7 +122,7 @@ class Autocomplete(rlcompleter.Completer):
         for word in keyword.kwlist:
             if self.method_match(word, n, text):
                 hash[word] = 1
-        for nspace in [__builtin__.__dict__, self.namespace]:
+        for nspace in [builtins.__dict__, self.namespace]:
             for word, val in nspace.items():
                 if self.method_match(word, len(text), text) and word != "__builtins__":
                     hash[self._callable_postfix(val, word)] = 1

@@ -20,6 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+
+from __future__ import absolute_import
 from __future__ import with_statement
 
 import imp
@@ -179,7 +181,7 @@ def find_coroutine():
         return None
 
     try:
-        find_iterator.next()
+        next(find_iterator)
     except StopIteration:
         fully_loaded = True
 

@@ -39,6 +39,8 @@
 # - Instead the suspend key exits the program
 # - View source doesn't work on windows unless you install the less program (From GnuUtils or Cygwin)
 
+
+from __future__ import absolute_import
 from __future__ import division, with_statement
 
 import platform
@@ -88,6 +90,12 @@ import bpython.args
 
 if not py3:
     import inspect
+
+
+try:
+    unicode
+except NameError:
+    unicode = str
 
 
 # --- module globals ---
@@ -423,7 +431,7 @@ class CLIRepl(repl.Repl):
         # curses does not handle this on its own. Sad.
         height, width = self.scr.getmaxyx()
         max_y = min(self.iy + (self.ix + len(self.s)) // width + 1, height)
-        for y in xrange(self.iy + 1, max_y):
+        for y in range(self.iy + 1, max_y):
             self.scr.move(y, 0)
             self.scr.clrtoeol()
 
@@ -663,7 +671,7 @@ class CLIRepl(repl.Repl):
         self.iy, self.ix = self.scr.getyx()
 
         if not self.paste_mode:
-            for _ in xrange(self.next_indentation()):
+            for _ in range(self.next_indentation()):
                 self.p_key('\t')
 
         self.cpos = 0
@@ -1070,7 +1078,7 @@ class CLIRepl(repl.Repl):
         curses.raw(False)
         try:
             return repl.Repl.push(self, s, insert_into_history)
-        except SystemExit, e:
+        except SystemExit as e:
             # Avoid a traceback on e.g. quit()
             self.do_exit = True
             self.exit_value = e.args
@@ -1146,7 +1154,7 @@ class CLIRepl(repl.Repl):
 
         real_lineno = self.iy
         height, width = self.scr.getmaxyx()
-        for i in xrange(lineno, len(self.buffer)):
+        for i in range(lineno, len(self.buffer)):
             string = self.buffer[i]
             # 4 = length of prompt
             length = len(string.encode(getpreferredencoding())) + 4
@@ -1213,7 +1221,7 @@ class CLIRepl(repl.Repl):
         self.scr.refresh()
 
         if self.buffer:
-            for _ in xrange(indent):
+            for _ in range(indent):
                 self.tab()
 
         self.evaluating = False
@@ -1468,7 +1476,7 @@ class CLIRepl(repl.Repl):
                 self.s = self.s[:-len(self.matches_iter.current())] + cw
 
             current_match = back and self.matches_iter.previous() \
-                                  or self.matches_iter.next()
+                                  or next(self.matches_iter)
 
             # update s with the new match
             if current_match:
@@ -1888,7 +1896,7 @@ def main_curses(scr, args, config, interactive=True, locals_=None,
         exit_value = 0
         try:
             bpython.args.exec_code(interpreter, args)
-        except SystemExit, e:
+        except SystemExit as e:
             # The documentation of code.InteractiveInterpreter.runcode claims
             # that it reraises SystemExit. However, I can't manage to trigger
             # that. To be one the safe side let's catch SystemExit here anyway.

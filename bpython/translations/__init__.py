@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import gettext
 import locale
 import os.path

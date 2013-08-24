@@ -21,6 +21,8 @@
 # THE SOFTWARE.
 
 
+
+from __future__ import absolute_import
 import curses
 import errno
 import os
@@ -54,18 +56,18 @@ def page(data, use_internal=False):
                 data = data.encode(sys.__stdout__.encoding, 'replace')
             popen.stdin.write(data)
             popen.stdin.close()
-        except OSError, e:
+        except OSError as e:
             if e.errno == errno.ENOENT:
                 # pager command not found, fall back to internal pager
                 page_internal(data)
                 return
-        except IOError, e:
+        except IOError as e:
             if e.errno != errno.EPIPE:
                 raise
         while True:
             try:
                 popen.wait()
-            except OSError, e:
+            except OSError as e:
                 if e.errno != errno.EINTR:
                     raise
             else:

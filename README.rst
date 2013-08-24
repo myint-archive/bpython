@@ -7,10 +7,10 @@ bpython - A fancy curses interface to the Python interactive interpreter
 
 Dependencies
 ============
-Pygments
-(apt-get install python-pygments)
-Sphinx != 1.1.2 (for the documentation only)
-(apt-get install python-sphinx)
+- Pygments
+  (apt-get install python-pygments)
+- Sphinx != 1.1.2 (for the documentation only)
+  (apt-get install python-sphinx)
 
 Introduction
 ============
@@ -108,8 +108,8 @@ http://bitbucket.org/bobf/bpython/issues/
 CLI Windows Support
 ===================
 
-Dependencies
-------------
+Windows Dependencies
+--------------------
 Curses
     Use the appropriate version compiled by Christoph Gohlke
     http://www.lfd.uci.edu/~gohlke/pythonlibs/

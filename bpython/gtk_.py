@@ -56,6 +56,7 @@ except NameError:
 _COLORS = dict(b='blue', c='cyan', g='green', m='magenta', r='red',
                w='white', y='yellow', k='black', d='black')
 
+
 def add_tags_to_buffer(color_scheme, text_buffer):
     tags = dict()
     for (name, value) in color_scheme.items():
@@ -68,10 +69,10 @@ def add_tags_to_buffer(color_scheme, text_buffer):
                 tag.set_property('weight', pango.WEIGHT_BOLD)
     return tags
 
+
 class ArgspecFormatter(object):
-    """
-    Format an argspec using Pango markup language.
-    """
+
+    """Format an argspec using Pango markup language."""
 
     def format(self, args, varargs, varkw, defaults, in_arg):
         self.args_seen = 0
@@ -93,6 +94,7 @@ class ArgspecFormatter(object):
 
 
 class ExceptionDialog(gtk.MessageDialog):
+
     def __init__(self, exc_type, exc_value, tb, text=None):
         if text is None:
             text = _('An error occurred.')
@@ -113,11 +115,10 @@ class ExceptionDialog(gtk.MessageDialog):
 
 
 class ExceptionManager(object):
-    """
-    A context manager which runs the dialog `DialogType` on error, with
-    the exception's type, value, a traceback and a text to display as
-    arguments.
-    """
+
+    """A context manager which runs the dialog `DialogType` on error, with the
+    exception's type, value, a traceback and a text to display as arguments."""
+
     def __init__(self, DialogType, text=None):
         self.DialogType = DialogType
         self.text = text or _('An error occurred.')
@@ -132,10 +133,10 @@ class ExceptionManager(object):
             dialog.run()
             dialog.destroy()
 
+
 class Nested(object):
-    """
-    A helper class, inspired by a semaphore.
-    """
+
+    """A helper class, inspired by a semaphore."""
 
     def __init__(self):
         self.counter = 0
@@ -153,8 +154,11 @@ class Nested(object):
     def __nonzero__(self):
         return bool(self.counter)
 
+
 class Statusbar(gtk.Statusbar):
-    """Contains feedback messages"""
+
+    """Contains feedback messages."""
+
     def __init__(self):
         gtk.Statusbar.__init__(self)
         self.context_id = self.get_context_id(_('Statusbar'))
@@ -162,7 +166,7 @@ class Statusbar(gtk.Statusbar):
     def message(self, s, n=3):
         self.clear()
         self.push(self.context_id, s)
-        gobject.timeout_add(n*1000, self.clear)
+        gobject.timeout_add(n * 1000, self.clear)
 
     def clear(self):
         self.pop(self.context_id)
@@ -172,9 +176,8 @@ class Statusbar(gtk.Statusbar):
 
 
 class SuggestionWindow(gtk.Window):
-    """
-    The window where suggestions are displayed.
-    """
+
+    """The window where suggestions are displayed."""
     __gsignals__ = dict(expose_event=None,
                         selection_changed=(gobject.SIGNAL_RUN_LAST, None,
                                            (str, )))
@@ -228,9 +231,7 @@ class SuggestionWindow(gtk.Window):
             self.select(-1)
 
     def do_expose_event(self, event):
-        """
-        Draw a flat box around the popup window on expose event.
-        """
+        """Draw a flat box around the popup window on expose event."""
         width, height = self.get_size()
         self.style.paint_flat_box(self.window, gtk.STATE_NORMAL,
                                   gtk.SHADOW_OUT, None, self,
@@ -248,9 +249,7 @@ class SuggestionWindow(gtk.Window):
             self.emit('selection-changed', value)
 
     def select(self, offset):
-        """
-        Select the suggestions at offset `offset`.
-        """
+        """Select the suggestions at offset `offset`."""
         selection = self.view.get_selection()
         model, iter_ = selection.get_selected()
         if iter_ is not None:
@@ -292,6 +291,7 @@ class SuggestionWindow(gtk.Window):
 
 
 class GTKInteraction(repl.Interaction):
+
     def __init__(self, config, statusbar):
         repl.Interaction.__init__(self, config, statusbar)
 
@@ -303,7 +303,7 @@ class GTKInteraction(repl.Interaction):
         return response == gtk.RESPONSE_YES
 
     def file_prompt(self, s):
-        chooser = gtk.FileChooserDialog(title=_("File to save to"),
+        chooser = gtk.FileChooserDialog(title=_('File to save to'),
                                         action=gtk.FILE_CHOOSER_ACTION_SAVE,
                                         buttons=(gtk.STOCK_CANCEL,
                                                  gtk.RESPONSE_CANCEL,
@@ -314,13 +314,13 @@ class GTKInteraction(repl.Interaction):
         chooser.set_current_folder(os.path.expanduser('~'))
 
         pyfilter = gtk.FileFilter()
-        pyfilter.set_name(_("Python files"))
-        pyfilter.add_pattern("*.py")
+        pyfilter.set_name(_('Python files'))
+        pyfilter.add_pattern('*.py')
         chooser.add_filter(pyfilter)
 
         allfilter = gtk.FileFilter()
-        allfilter.set_name(_("All files"))
-        allfilter.add_pattern("*")
+        allfilter.set_name(_('All files'))
+        allfilter.add_pattern('*')
         chooser.add_filter(allfilter)
 
         response = chooser.run()
@@ -335,6 +335,7 @@ class GTKInteraction(repl.Interaction):
 
     def notify(self, s, n=10):
         self.statusbar.message(s)
+
 
 class ReplWidget(gtk.TextView, repl.Repl):
     __gsignals__ = dict(button_press_event=None,
@@ -357,11 +358,14 @@ class ReplWidget(gtk.TextView, repl.Repl):
                               self.on_suggestion_selection_changed)
         self.list_win.hide()
 
-        self.modify_base('normal', gtk.gdk.color_parse(_COLORS[self.config.color_gtk_scheme['background']]))
+        self.modify_base('normal', gtk.gdk.color_parse(
+            _COLORS[self.config.color_gtk_scheme['background']]))
 
         self.text_buffer = self.get_buffer()
         self.interact = GTKInteraction(self.config, Statusbar())
-        tags = add_tags_to_buffer(self.config.color_gtk_scheme, self.text_buffer)
+        tags = add_tags_to_buffer(
+            self.config.color_gtk_scheme,
+            self.text_buffer)
         tags['prompt'].set_property('editable', False)
 
         self.text_buffer.connect('delete-range', self.on_buf_delete_range)
@@ -369,9 +373,7 @@ class ReplWidget(gtk.TextView, repl.Repl):
         self.text_buffer.connect('mark-set', self.on_buf_mark_set)
 
     def change_line(self, line):
-        """
-        Replace the current input line with `line`.
-        """
+        """Replace the current input line with `line`."""
         with self.editing:
             self.text_buffer.delete(self.get_line_start_iter(),
                                     self.get_line_end_iter())
@@ -381,9 +383,7 @@ class ReplWidget(gtk.TextView, repl.Repl):
             self.text_buffer.insert(self.get_line_start_iter(), line)
 
     def clear_current_line(self):
-        """
-        Called when a SyntaxError occurs.
-        """
+        """Called when a SyntaxError occurs."""
         repl.Repl.clear_current_line(self)
         self.reset_indent = True
 
@@ -413,16 +413,12 @@ class ReplWidget(gtk.TextView, repl.Repl):
         return cpos
 
     def cw(self):
-        """
-        Return the current word.
-        """
+        """Return the current word."""
         return self.text_buffer.get_text(self.get_word_start_iter(),
                                          self.get_cursor_iter())
 
     def current_line(self):
-        """
-        Return the current input line.
-        """
+        """Return the current input line."""
         return self.text_buffer.get_slice(self.get_line_start_iter(),
                                           self.get_line_end_iter())
 
@@ -433,25 +429,19 @@ class ReplWidget(gtk.TextView, repl.Repl):
         self.move_cursor(len(string))
 
     def get_cursor_iter(self):
-        """
-        Return an iter where the cursor currently is.
-        """
+        """Return an iter where the cursor currently is."""
         cursor_marker = self.text_buffer.get_insert()
         return self.text_buffer.get_iter_at_mark(cursor_marker)
 
     def get_line_start_iter(self):
-        """
-        Return an iter where the current line starts.
-        """
+        """Return an iter where the current line starts."""
         line_start_marker = self.text_buffer.get_mark('line_start')
         if line_start_marker is None:
             return self.text_buffer.get_start_iter()
         return self.text_buffer.get_iter_at_mark(line_start_marker)
 
     def get_line_end_iter(self):
-        """
-        Return an iter where the current line ends.
-        """
+        """Return an iter where the current line ends."""
         iter_ = self.get_line_start_iter()
         if not iter_.ends_line() and not iter_.forward_to_line_end():
             iter_ = self.text_buffer.get_end_iter()
@@ -488,8 +478,9 @@ class ReplWidget(gtk.TextView, repl.Repl):
             if event.keyval == gtk.keysyms.F2:
                 source = self.get_source_of_current_name()
                 if source is not None:
-                    show_source_in_new_window(source, self.config.color_gtk_scheme,
-                                              self.config.syntax)
+                    show_source_in_new_window(
+                        source, self.config.color_gtk_scheme,
+                        self.config.syntax)
                 else:
                     self.interact.notify(_('Cannot show source.'))
             elif event.keyval == gtk.keysyms.Return:
@@ -546,9 +537,7 @@ class ReplWidget(gtk.TextView, repl.Repl):
         self.prompt(False)
 
     def highlight(self, start_iter, tokens):
-        """
-        Highlight the text starting at `start_iter` using `tokens`.
-        """
+        """Highlight the text starting at `start_iter` using `tokens`."""
         token_start_iter = start_iter.copy()
         token_end_iter = start_iter.copy()
         for (token, value) in tokens:
@@ -560,9 +549,7 @@ class ReplWidget(gtk.TextView, repl.Repl):
             token_start_iter.forward_chars(len(value))
 
     def highlight_current_line(self):
-        """
-        Highlight the current line.
-        """
+        """Highlight the current line."""
         if self.config.syntax:
             if self.highlighted_paren is not None:
                 self.reprint_line(*self.highlighted_paren)
@@ -594,9 +581,7 @@ class ReplWidget(gtk.TextView, repl.Repl):
             offset += len(value)
 
     def move_cursor(self, offset):
-        """
-        Move the cursor to a given offset.
-        """
+        """Move the cursor to a given offset."""
         iter_ = self.get_cursor_iter()
         iter_.forward_chars(offset)
         self.text_buffer.place_cursor(iter_)
@@ -660,7 +645,7 @@ class ReplWidget(gtk.TextView, repl.Repl):
             self.pastebin(self.text_buffer.get_text(bounds[0], bounds[1]))
 
     def write(self, s):
-        """For overriding stdout defaults"""
+        """For overriding stdout defaults."""
         if '\x04' in s:
             for block in s.split('\x04'):
                 self.write(block)
@@ -677,9 +662,7 @@ class ReplWidget(gtk.TextView, repl.Repl):
         self.s_hist.append(s.rstrip())
 
     def prompt(self, more):
-        """
-        Show the appropriate Python prompt.
-        """
+        """Show the appropriate Python prompt."""
         if more:
             text = self.ps2
         else:
@@ -748,6 +731,7 @@ class ReplWidget(gtk.TextView, repl.Repl):
                 )
             self.move_cursor(len(string))
 
+
 def show_source_in_new_window(source, color_scheme=None, highlight=True):
     win = gtk.Window()
     sw = gtk.ScrolledWindow()
@@ -765,6 +749,7 @@ def show_source_in_new_window(source, color_scheme=None, highlight=True):
     sw.add(view)
     win.add(sw)
     win.show_all()
+
 
 def init_import_completion():
     try:
@@ -810,8 +795,9 @@ def main(args=None):
 
         # branding
         # fix icon to be distributed and loaded from the correct path
-        icon = gtk.gdk.pixbuf_new_from_file(os.path.join(os.path.dirname(__file__),
-                                                         'logo.png'))
+        icon = gtk.gdk.pixbuf_new_from_file(
+            os.path.join(os.path.dirname(__file__),
+                         'logo.png'))
 
         parent.set_title('bpython')
         parent.set_icon(icon)
@@ -826,23 +812,23 @@ def main(args=None):
     mb = gtk.MenuBar()
     filemenu = gtk.Menu()
 
-    filem = gtk.MenuItem("File")
+    filem = gtk.MenuItem('File')
     filem.set_submenu(filemenu)
 
     save = gtk.ImageMenuItem(gtk.STOCK_SAVE)
-    save.connect("activate", repl_widget.do_write2file)
+    save.connect('activate', repl_widget.do_write2file)
     filemenu.append(save)
 
-    pastebin = gtk.MenuItem("Pastebin")
-    pastebin.connect("activate", repl_widget.do_paste)
+    pastebin = gtk.MenuItem('Pastebin')
+    pastebin.connect('activate', repl_widget.do_paste)
     filemenu.append(pastebin)
 
-    pastebin_partial = gtk.MenuItem(_("Pastebin selection"))
-    pastebin_partial.connect("activate", repl_widget.do_partial_paste)
+    pastebin_partial = gtk.MenuItem(_('Pastebin selection'))
+    pastebin_partial.connect('activate', repl_widget.do_partial_paste)
     filemenu.append(pastebin_partial)
 
     exit = gtk.ImageMenuItem(gtk.STOCK_QUIT)
-    exit.connect("activate", gtk.main_quit)
+    exit.connect('activate', gtk.main_quit)
     filemenu.append(exit)
 
     mb.append(filem)

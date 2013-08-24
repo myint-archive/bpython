@@ -3,13 +3,17 @@ import unittest
 
 from bpython import inspection
 
+
 class TestInspection(unittest.TestCase):
+
     def test_is_callable(self):
         class OldCallable:
+
             def __call__(self):
                 pass
 
         class Callable(object):
+
             def __call__(self):
                 pass
 
@@ -45,18 +49,18 @@ class TestInspection(unittest.TestCase):
         self.assertEqual(str(defaults[0]), default_arg_repr)
 
     def test_pasekeywordpairs_string(self):
-        def spam(eggs="foo, bar"):
+        def spam(eggs='foo, bar'):
             pass
 
-        defaults = inspection.getargspec("spam", spam)[1][3]
+        defaults = inspection.getargspec('spam', spam)[1][3]
         self.assertEqual(repr(defaults[0]), "'foo, bar'")
 
     def test_parsekeywordpairs_multiple_keywords(self):
-        def spam(eggs=23, foobar="yay"):
+        def spam(eggs=23, foobar='yay'):
             pass
 
-        defaults = inspection.getargspec("spam", spam)[1][3]
-        self.assertEqual(repr(defaults[0]), "23")
+        defaults = inspection.getargspec('spam', spam)[1][3]
+        self.assertEqual(repr(defaults[0]), '23')
         self.assertEqual(repr(defaults[1]), "'yay'")
 
 if __name__ == '__main__':

@@ -16,22 +16,23 @@ try:
 except ImportError:
     reactor = None
 
-TEST_CONFIG = os.path.join(os.path.dirname(__file__), "test.config")
+TEST_CONFIG = os.path.join(os.path.dirname(__file__), 'test.config')
+
 
 def set_win_size(fd, rows, columns):
     s = struct.pack('HHHH', rows, columns, 0, 0)
     fcntl.ioctl(fd, termios.TIOCSWINSZ, s)
 
+
 class CrashersTest(object):
-    backend = "cli"
+    backend = 'cli'
 
     def run_bpython(self, input):
-        """
-        Run bpython (with `backend` as backend) in a subprocess and
-        enter the given input. Uses a test config that disables the
-        paste detection.
+        """Run bpython (with `backend` as backend) in a subprocess and enter
+        the given input. Uses a test config that disables the paste detection.
 
         Retuns bpython's output.
+
         """
         result = Deferred()
 
@@ -39,7 +40,7 @@ class CrashersTest(object):
             STATES = (SEND_INPUT, COLLECT) = range(2)
 
             def __init__(self):
-                self.data = ""
+                self.data = ''
                 self.delayed_call = None
                 self.states = iter(self.STATES)
                 self.state = self.states.next()
@@ -53,7 +54,7 @@ class CrashersTest(object):
             def next(self):
                 self.delayed_call = None
                 if self.state == self.SEND_INPUT:
-                    index = self.data.find(">>> ")
+                    index = self.data.find('>>> ')
                     if index >= 0:
                         self.data = self.data[index + 4:]
                         self.transport.write(input)
@@ -62,7 +63,7 @@ class CrashersTest(object):
                     self.transport.closeStdin()
                     if self.transport.pid is not None:
                         self.delayed_call = None
-                        self.transport.signalProcess("TERM")
+                        self.transport.signalProcess('TERM')
 
             def processExited(self, reason):
                 if self.delayed_call is not None:
@@ -72,9 +73,13 @@ class CrashersTest(object):
         (master, slave) = pty.openpty()
         set_win_size(slave, 25, 80)
         reactor.spawnProcess(Protocol(), sys.executable,
-            (sys.executable, "-m", "bpython." + self.backend,
-             "--config",  TEST_CONFIG),
-            env=dict(TERM="vt100", LANG=os.environ.get("LANG", "")),
+                            (sys.executable, '-m', 'bpython.' + self.backend,
+                             '--config', TEST_CONFIG),
+                             env=dict(
+                                 TERM='vt100',
+                                 LANG=os.environ.get(
+            'LANG',
+         '')),
             usePTY=(master, slave, os.ttyname(slave)))
         return result
 
@@ -98,15 +103,15 @@ class CrashersTest(object):
         return self.run_bpython(input).addCallback(self.check_no_traceback)
 
     def check_no_traceback(self, data):
-        tb = data[data.find("Traceback"):]
-        self.assertTrue("Traceback" not in data, tb)
+        tb = data[data.find('Traceback'):]
+        self.assertTrue('Traceback' not in data, tb)
 
 if reactor is not None:
     class CursesCrashersTest(TrialTestCase, CrashersTest):
-        backend = "cli"
+        backend = 'cli'
 
     class UrwidCrashersTest(TrialTestCase, CrashersTest):
-        backend = "urwid"
+        backend = 'urwid'
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

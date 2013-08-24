@@ -49,11 +49,12 @@ SIMPLE = 'simple'
 SUBSTRING = 'substring'
 FUZZY = 'fuzzy'
 
-class Autocomplete(rlcompleter.Completer):
-    """
-    """
 
-    def __init__(self, namespace = None, config = None):
+class Autocomplete(rlcompleter.Completer):
+
+    """"""
+
+    def __init__(self, namespace=None, config=None):
         rlcompleter.Completer.__init__(self, namespace)
         self.locals = namespace
         if hasattr(config, 'autocomplete_mode'):
@@ -62,8 +63,7 @@ class Autocomplete(rlcompleter.Completer):
             self.autocomplete_mode = SUBSTRING
 
     def attr_matches(self, text):
-        """Taken from rlcompleter.py and bent to my will.
-        """
+        """Taken from rlcompleter.py and bent to my will."""
 
         # Gna, Py 2.6's rlcompleter searches for __call__ inside the
         # instance instead of the type, so we monkeypatch to prevent
@@ -99,8 +99,8 @@ class Autocomplete(rlcompleter.Completer):
         matches = []
         n = len(attr)
         for word in words:
-            if self.method_match(word, n, attr) and word != "__builtins__":
-                matches.append("%s.%s" % (expr, word))
+            if self.method_match(word, n, attr) and word != '__builtins__':
+                matches.append('%s.%s' % (expr, word))
         return matches
 
     def _callable_postfix(self, value, word):
@@ -112,8 +112,10 @@ class Autocomplete(rlcompleter.Completer):
 
     def global_matches(self, text):
         """Compute matches when text is a simple name.
+
         Return a list of all keywords, built-in functions and names currently
         defined in self.namespace that match.
+
         """
 
         hash = {}
@@ -124,7 +126,7 @@ class Autocomplete(rlcompleter.Completer):
                 hash[word] = 1
         for nspace in [builtins.__dict__, self.namespace]:
             for word, val in nspace.items():
-                if self.method_match(word, len(text), text) and word != "__builtins__":
+                if self.method_match(word, len(text), text) and word != '__builtins__':
                     hash[self._callable_postfix(val, word)] = 1
         matches = hash.keys()
         return sorted(matches)
@@ -138,4 +140,3 @@ class Autocomplete(rlcompleter.Completer):
         else:
             s = r'.*%s.*' % '.*'.join(list(text))
             return re.search(s, word)
-

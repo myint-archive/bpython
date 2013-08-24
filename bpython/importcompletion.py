@@ -32,6 +32,7 @@ try:
     from warnings import catch_warnings
 except ImportError:
     import contextlib
+
     @contextlib.contextmanager
     def catch_warnings():
         """Stripped-down version of `warnings.catch_warnings()`
@@ -136,12 +137,12 @@ def find_modules(path):
             if name.endswith(suffix[0]):
                 name = name[:-len(suffix[0])]
                 break
-        if py3 and name == "badsyntax_pep3120":
+        if py3 and name == 'badsyntax_pep3120':
             # Workaround for issue #166
             continue
         try:
             with catch_warnings():
-                warnings.simplefilter("ignore", ImportWarning)
+                warnings.simplefilter('ignore', ImportWarning)
                 fo, pathname, _ = imp.find_module(name, [path])
         except (ImportError, IOError, SyntaxError):
             continue
@@ -162,7 +163,11 @@ def find_modules(path):
 
 def find_all_modules(path=None):
     """Return a list with all modules in `path`, which should be a list of
-    directory names. If path is not given, sys.path will be used."""
+    directory names.
+
+    If path is not given, sys.path will be used.
+
+    """
     if path is None:
         modules.update(sys.builtin_module_names)
         path = sys.path

@@ -24,14 +24,14 @@
 #
 
 
-"""
-    Helper module for Python 3 compatibility.
+"""Helper module for Python 3 compatibility.
 
-    Defines the following attributes:
+Defines the following attributes:
 
-    - PythonLexer: Pygment's Python lexer matching the hosting runtime's
-      Python version.
-    - py3: True if the hosting Python runtime is of Python version 3 or later
+- PythonLexer: Pygment's Python lexer matching the hosting runtime's
+  Python version.
+- py3: True if the hosting Python runtime is of Python version 3 or later
+
 """
 
 from __future__ import absolute_import

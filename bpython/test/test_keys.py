@@ -2,15 +2,16 @@ from __future__ import absolute_import
 import unittest
 import bpython.keys as keys
 
+
 class TestCLIKeys(unittest.TestCase):
+
     def test_keymap_map(self):
-        """Verify KeyMap.map being a dictionary with the correct
-        length."""
+        """Verify KeyMap.map being a dictionary with the correct length."""
         self.assertEqual(len(keys.cli_key_dispatch.map), 43)
 
     def test_keymap_setitem(self):
         """Verify keys.KeyMap correctly setting items."""
-        keys.cli_key_dispatch['simon'] = 'awesome';
+        keys.cli_key_dispatch['simon'] = 'awesome'
         self.assertEqual(keys.cli_key_dispatch['simon'], 'awesome')
 
     def test_keymap_delitem(self):
@@ -27,21 +28,22 @@ class TestCLIKeys(unittest.TestCase):
         self.assertEqual(keys.cli_key_dispatch['C-a'], ('\x01', '^A'))
 
     def test_keymap_keyerror(self):
-        """Verify keys.KeyMap raising KeyError when getting undefined key"""
+        """Verify keys.KeyMap raising KeyError when getting undefined key."""
         def raiser():
             keys.cli_key_dispatch['C-asdf']
             keys.cli_key_dispatch['C-qwerty']
-        self.assertRaises(KeyError, raiser);
+        self.assertRaises(KeyError, raiser)
+
 
 class TestUrwidKeys(unittest.TestCase):
+
     def test_keymap_map(self):
-        """Verify KeyMap.map being a dictionary with the correct
-        length."""
+        """Verify KeyMap.map being a dictionary with the correct length."""
         self.assertEqual(len(keys.urwid_key_dispatch.map), 64)
 
     def test_keymap_setitem(self):
         """Verify keys.KeyMap correctly setting items."""
-        keys.urwid_key_dispatch['simon'] = 'awesome';
+        keys.urwid_key_dispatch['simon'] = 'awesome'
         self.assertEqual(keys.urwid_key_dispatch['simon'], 'awesome')
 
     def test_keymap_delitem(self):
@@ -58,11 +60,11 @@ class TestUrwidKeys(unittest.TestCase):
         self.assertEqual(keys.urwid_key_dispatch['M-a'], 'meta a')
 
     def test_keymap_keyerror(self):
-        """Verify keys.KeyMap raising KeyError when getting undefined key"""
+        """Verify keys.KeyMap raising KeyError when getting undefined key."""
         def raiser():
             keys.urwid_key_dispatch['C-asdf']
             keys.urwid_key_dispatch['C-qwerty']
-        self.assertRaises(KeyError, raiser);
+        self.assertRaises(KeyError, raiser)
 
 
 if __name__ == '__main__':

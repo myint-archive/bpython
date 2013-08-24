@@ -82,14 +82,18 @@ class Interpreter(code.InteractiveInterpreter):
         """The syntaxerror callback can be set at any time and will be called
         on a caught syntax error. The purpose for this in bpython is so that
         the repl can be instantiated after the interpreter (which it
-        necessarily must be with the current factoring) and then an exception
+        necessarily must be with the current factoring) and then an exception.
+
         callback can be added to the Interpeter instance afterwards - more
         specifically, this is so that autoindentation does not occur after a
-        traceback."""
+        traceback.
+
+        """
 
         self.encoding = encoding or sys.getdefaultencoding()
         self.syntaxerror_callback = None
-        # Unfortunately code.InteractiveInterpreter is a classic class, so no super()
+        # Unfortunately code.InteractiveInterpreter is a classic class, so no
+        # super()
         code.InteractiveInterpreter.__init__(self, locals)
 
     if not py3:
@@ -129,9 +133,8 @@ class Interpreter(code.InteractiveInterpreter):
         self.writetb(list)
 
     def showtraceback(self):
-        """This needs to override the default traceback thing
-        so it can put it into a pretty colour and maybe other
-        stuff, I don't know"""
+        """This needs to override the default traceback thing so it can put it
+        into a pretty colour and maybe other stuff, I don't know."""
         try:
             t, v, tb = sys.exc_info()
             sys.last_type = t
@@ -147,7 +150,7 @@ class Interpreter(code.InteractiveInterpreter):
 
             l = traceback.format_list(tblist)
             if l:
-                l.insert(0, "Traceback (most recent call last):\n")
+                l.insert(0, 'Traceback (most recent call last):\n')
             l[len(l):] = traceback.format_exception_only(t, v)
         finally:
             tblist = tb = None
@@ -215,7 +218,6 @@ class History(object):
                 return idx + 1
         return 0
 
-
     def forward(self, start=True, search=False):
         """Move one step forward in the history."""
         if self.index > 1:
@@ -243,8 +245,6 @@ class History(object):
             if search_term in val:
                 return idx + 1
         return self.index
-
-
 
     def last(self):
         """Move forward to the end of the history."""
@@ -329,6 +329,7 @@ class MatchesIterator(object):
 
 
 class Interaction(object):
+
     def __init__(self, config, statusbar=None):
         self.config = config
 
@@ -346,6 +347,7 @@ class Interaction(object):
 
 
 class Repl(object):
+
     """Implements the necessary guff for a Python-repl-alike interface
 
     The execution of the code entered and all that stuff was taken from the
@@ -384,6 +386,7 @@ class Repl(object):
         interp is a Python code.InteractiveInterpreter instance
 
         config is a populated bpython.config.Struct.
+
         """
 
         self.config = config
@@ -419,12 +422,14 @@ class Repl(object):
         pythonhist = os.path.expanduser(self.config.hist_file)
         if os.path.exists(pythonhist):
             self.rl_history.load(pythonhist,
-                    getpreferredencoding() or "ascii")
+                                 getpreferredencoding() or 'ascii')
 
     def startup(self):
-        """
-        Execute PYTHONSTARTUP file if it exits. Call this after front
+        """Execute PYTHONSTARTUP file if it exits.
+
+        Call this after front
         end-specific initialisation.
+
         """
         filename = os.environ.get('PYTHONSTARTUP')
         if filename and os.path.isfile(filename):
@@ -432,10 +437,14 @@ class Repl(object):
                 if py3:
                     self.interp.runsource(f.read(), filename, 'exec')
                 else:
-                    self.interp.runsource(f.read(), filename, 'exec', encode=False)
+                    self.interp.runsource(
+                        f.read(),
+                        filename,
+                        'exec',
+                        encode=False)
 
     def current_string(self, concatenate=False):
-        """If the line ends in a string get it, otherwise return ''"""
+        """If the line ends in a string get it, otherwise return ''."""
         tokens = self.tokenize(self.current_line())
         string_tokens = list(takewhile(token_is_any_of([Token.String,
                                                         Token.Text]),
@@ -473,8 +482,12 @@ class Repl(object):
 
     def get_args(self):
         """Check if an unclosed parenthesis exists, then attempt to get the
-        argspec() for it. On success, update self.argspec and return True,
-        otherwise set self.argspec to None and return False"""
+        argspec() for it.
+
+        On success, update self.argspec and return True, otherwise set
+        self.argspec to None and return False
+
+        """
 
         self.current_func = None
 
@@ -541,9 +554,12 @@ class Repl(object):
         return False
 
     def get_source_of_current_name(self):
-        """Return the source code of the object which is bound to the
-        current name in the current input line. Return `None` if the
-        source cannot be found."""
+        """Return the source code of the object which is bound to the current
+        name in the current input line.
+
+        Return `None` if the source cannot be found.
+
+        """
         try:
             obj = self.current_func
             if obj is None:
@@ -558,9 +574,12 @@ class Repl(object):
 
     def complete(self, tab=False):
         """Construct a full list of possible completions and construct and
-        display them in a window. Also check if there's an available argspec
-        (via the inspect module) and bang that on top of the completions too.
-        The return value is whether the list_win is visible or not."""
+        display them in a window. Also check if there's an available argspec.
+
+        (via the inspect module) and bang that on top of the completions
+        too. The return value is whether the list_win is visible or not.
+
+        """
 
         self.docstring = None
         if not self.get_args():
@@ -624,8 +643,8 @@ class Repl(object):
             else:
                 matches = self.completer.matches
                 if (self.config.complete_magic_methods and self.buffer and
-                    self.buffer[0].startswith("class ") and
-                    self.current_line().lstrip().startswith("def ")):
+                    self.buffer[0].startswith('class ') and
+                    self.current_line().lstrip().startswith('def ')):
                     matches.extend(name for name in self.config.magic_methods
                                    if name.startswith(cw))
 
@@ -636,7 +655,8 @@ class Repl(object):
                 matches.extend(name + '=' for name in self.argspec[1][4]
                                if name.startswith(cw))
 
-        # unless the first character is a _ filter out all attributes starting with a _
+        # unless the first character is a _ filter out all attributes starting
+        # with a _
         if not e and not cw.split('.')[-1].startswith('_'):
             matches = [match for match in matches
                        if not match.split('.')[-1].startswith('_')]
@@ -649,7 +669,6 @@ class Repl(object):
         else:
             # remove duplicates
             self.matches = sorted(set(matches))
-
 
         if len(self.matches) == 1 and not self.config.auto_display_list:
             self.list_win_visible = True
@@ -680,8 +699,8 @@ class Repl(object):
         return out
 
     def next_indentation(self):
-        """Return the indentation of the next line based on the current
-        input buffer."""
+        """Return the indentation of the next line based on the current input
+        buffer."""
         if self.buffer:
             indentation = next_indentation(self.buffer[-1],
                                            self.config.tab_length)
@@ -696,8 +715,12 @@ class Repl(object):
 
     def formatforfile(self, s):
         """Format the stdout buffer to something suitable for writing to disk,
-        i.e. without >>> and ... at input lines and with "# OUT: " prepended to
-        output lines."""
+        i.e. without >>> and ...
+
+        at input lines and with "# OUT: " prepended to
+        output lines.
+
+        """
 
         def process():
             for line in s.split('\n'):
@@ -706,8 +729,8 @@ class Repl(object):
                 elif line.startswith(self.ps2):
                     yield line[len(self.ps2):]
                 elif line.rstrip():
-                    yield "# OUT: %s" % (line,)
-        return "\n".join(process())
+                    yield '# OUT: %s' % (line,)
+        return '\n'.join(process())
 
     def write2file(self):
         """Prompt for a filename and write the current contents of the stdout
@@ -716,10 +739,10 @@ class Repl(object):
         try:
             fn = self.interact.file_prompt('Save to file (Esc to cancel): ')
             if not fn:
-                self.interact.notify("Save cancelled.")
+                self.interact.notify('Save cancelled.')
                 return
         except ValueError:
-            self.interact.notify("Save cancelled.")
+            self.interact.notify('Save cancelled.')
             return
 
         if fn.startswith('~'):
@@ -758,8 +781,8 @@ class Repl(object):
             s = self.getstdout()
 
         if (self.config.pastebin_confirm and
-            not self.interact.confirm(_("Pastebin buffer? (y/N) "))):
-            self.interact.notify(_("Pastebin aborted"))
+            not self.interact.confirm(_('Pastebin buffer? (y/N) '))):
+            self.interact.notify(_('Pastebin aborted'))
             return
         return self.do_pastebin(s)
 
@@ -787,9 +810,9 @@ class Repl(object):
         self.interact.notify(_('Posting data to pastebin...'))
         try:
             paste_id = pasteservice.pastes.newPaste('pycon', s, '', '', '',
-                   self.config.pastebin_private)
+                                                    self.config.pastebin_private)
         except (SocketError, XMLRPCError) as e:
-            self.interact.notify(_('Upload failed: %s') % (str(e), ) )
+            self.interact.notify(_('Upload failed: %s') % (str(e), ))
             return
 
         self.prev_pastebin_content = s
@@ -836,8 +859,8 @@ class Repl(object):
             parsed_url = urlparse(paste_url)
             if (not parsed_url.scheme
                 or any(unicodedata.category(c) == 'Cc' for c in paste_url)):
-                self.interact.notify(_("Upload failed: "
-                                       "Failed to recognize the helper "
+                self.interact.notify(_('Upload failed: '
+                                       'Failed to recognize the helper '
                                        "program's output as an URL."))
                 return
 
@@ -846,8 +869,8 @@ class Repl(object):
         return paste_url
 
     def push(self, s, insert_into_history=True):
-        """Push a line of code onto the buffer so it can process it all
-        at once when a code block ends"""
+        """Push a line of code onto the buffer so it can process it all at once
+        when a code block ends."""
         s = s.rstrip('\n')
         self.buffer.append(s)
 
@@ -860,9 +883,14 @@ class Repl(object):
                     self.rl_history.load(histfilename, getpreferredencoding())
                 self.rl_history.append(s)
                 try:
-                    self.rl_history.save(histfilename, getpreferredencoding(), self.config.hist_length)
+                    self.rl_history.save(
+                        histfilename,
+                        getpreferredencoding(),
+                        self.config.hist_length)
                 except EnvironmentError as err:
-                    self.interact.notify("Error occured while writing to file %s (%s) " % (histfilename, err.strerror))
+                    self.interact.notify(
+                        'Error occured while writing to file %s (%s) ' %
+                        (histfilename, err.strerror))
                     self.rl_history.entries = oldhistory
                     self.rl_history.append(s)
             else:
@@ -876,10 +904,13 @@ class Repl(object):
         return more
 
     def undo(self, n=1):
-        """Go back in the undo history n steps and call reeavluate()
-        Note that in the program this is called "Rewind" because I
-        want it to be clear that this is by no means a true undo
-        implementation, it is merely a convenience bonus."""
+        """Go back in the undo history n steps and call reeavluate().
+
+        Note that in the program this is called "Rewind" because I want
+        it to be clear that this is by no means a true undo
+        implementation, it is merely a convenience bonus.
+
+        """
         if not self.history:
             return None
 
@@ -999,7 +1030,10 @@ class Repl(object):
 
     def clear_current_line(self):
         """This is used as the exception callback for the Interpreter instance.
-        It prevents autoindentation from occuring after a traceback."""
+
+        It prevents autoindentation from occuring after a traceback.
+
+        """
 
 
 def next_indentation(line, tab_length):
@@ -1015,8 +1049,8 @@ def next_indentation(line, tab_length):
 
 
 def next_token_inside_string(s, inside_string):
-    """Given a code string s and an initial state inside_string, return
-    whether the next token will be inside a string or not."""
+    """Given a code string s and an initial state inside_string, return whether
+    the next token will be inside a string or not."""
     for token, value in PythonLexer().get_tokens(s):
         if token is Token.String:
             value = value.lstrip('bBrRuU')
@@ -1040,8 +1074,8 @@ def split_lines(tokens):
 
 
 def token_is(token_type):
-    """Return a callable object that returns whether a token is of the
-    given type `token_type`."""
+    """Return a callable object that returns whether a token is of the given
+    type `token_type`."""
 
     def token_is_type(token):
         """Return whether a token is of a certain type or not."""
@@ -1063,10 +1097,10 @@ def token_is_any_of(token_types):
 
     return token_is_any_of
 
+
 def extract_exit_value(args):
-    """Given the arguments passed to `SystemExit`, return the value that
-    should be passed to `sys.exit`.
-    """
+    """Given the arguments passed to `SystemExit`, return the value that should
+    be passed to `sys.exit`."""
     if len(args) == 0:
         return None
     elif len(args) == 1:

@@ -26,7 +26,7 @@
 
 from pygments.formatter import Formatter
 from pygments.token import Keyword, Name, Comment, String, Error, \
-     Number, Operator, Token, Whitespace, Literal, Punctuation
+    Number, Operator, Token, Whitespace, Literal, Punctuation
 
 """These format strings are pretty ugly.
 \x01 represents a colour marker, which
@@ -72,16 +72,16 @@ theme_map = {
 
 
 class BPythonFormatter(Formatter):
-    """This is the custom formatter for bpython.
-    Its format() method receives the tokensource
-    and outfile params passed to it from the
-    Pygments highlight() method and slops
-    them into the appropriate format string
-    as defined above, then writes to the outfile
-    object the final formatted string.
 
-    See the Pygments source for more info; it's pretty
-    straightforward."""
+    """This is the custom formatter for bpython. Its format() method receives
+    the tokensource and outfile params passed to it from the Pygments
+    highlight() method and slops them into the appropriate format string as
+    defined above, then writes to the outfile object the final formatted
+    string.
+
+    See the Pygments source for more info; it's pretty straightforward.
+
+    """
 
     def __init__(self, color_scheme, **options):
         self.f_strings = {}
@@ -101,7 +101,7 @@ class BPythonFormatter(Formatter):
 
             while token not in self.f_strings:
                 token = token.parent
-            o += "%s\x03%s\x04" % (self.f_strings[token], text)
+            o += '%s\x03%s\x04' % (self.f_strings[token], text)
         outfile.write(o.rstrip())
 
 # vim: sw=4 ts=4 sts=4 ai et

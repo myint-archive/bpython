@@ -18,10 +18,12 @@ from bpython.translations import _
 
 
 class OptionParserFailed(ValueError):
+
     """Raised by the RaisingOptionParser for a bogus commandline."""
 
 
 class RaisingOptionParser(OptionParser):
+
     def error(self, msg):
         raise OptionParserFailed()
 
@@ -55,9 +57,9 @@ def parse(args, extras=None, ignore_stdin=False):
 
     parser = RaisingOptionParser(
         usage=_('Usage: %prog [options] [file [args]]\n'
-        'NOTE: If bpython sees an argument it does '
-        'not know, execution falls back to the '
-        'regular Python interpreter.'))
+                'NOTE: If bpython sees an argument it does '
+                'not know, execution falls back to the '
+                'regular Python interpreter.'))
     # This is not sufficient if bpython gains its own -m support
     # (instead of falling back to Python itself for that).
     # That's probably fixable though, for example by having that
@@ -67,7 +69,7 @@ def parse(args, extras=None, ignore_stdin=False):
                       help=_('Use CONFIG instead of default config file.'))
     parser.add_option('--interactive', '-i', action='store_true',
                       help=_('Drop to bpython shell after running file '
-                           'instead of exiting.'))
+                             'instead of exiting.'))
     parser.add_option('--quiet', '-q', action='store_true',
                       help=_("Don't flush the output to stdout."))
     parser.add_option('--version', '-V', action='store_true',
@@ -88,8 +90,8 @@ def parse(args, extras=None, ignore_stdin=False):
     if options.version:
         print('bpython version', __version__, end=' ')
         print('on top of Python', sys.version.split()[0])
-        print ('(C) 2008-2012 Bob Farrell, Andreas Stuehrk et al. '
-               'See AUTHORS for detail.')
+        print('(C) 2008-2012 Bob Farrell, Andreas Stuehrk et al. '
+              'See AUTHORS for detail.')
         raise SystemExit
 
     if not ignore_stdin and not (sys.stdin.isatty() and sys.stdout.isatty()):
@@ -102,10 +104,12 @@ def parse(args, extras=None, ignore_stdin=False):
 
     return config, options, args
 
+
 def exec_code(interpreter, args):
-    """
-    Helper to execute code in a given interpreter. args should be a [faked]
-    sys.argv
+    """Helper to execute code in a given interpreter.
+
+    args should be a [faked] sys.argv
+
     """
     with open(args[0], 'r') as sourcefile:
         code_obj = compile(sourcefile.read(), args[0], 'exec')

@@ -30,6 +30,7 @@ Based on Urwid 0.9.9.
 This steals many things from bpython's "cli" backend.
 
 This is still *VERY* rough.
+
 """
 
 from __future__ import print_function
@@ -81,15 +82,15 @@ Parenthesis = Token.Punctuation.Parenthesis
 
 COLORMAP = {
     'k': 'black',
-    'r': 'dark red', # or light red?
-    'g': 'dark green', # or light green?
+    'r': 'dark red',  # or light red?
+    'g': 'dark green',  # or light green?
     'y': 'yellow',
-    'b': 'dark blue', # or light blue?
-    'm': 'dark magenta', # or light magenta?
-    'c': 'dark cyan', # or light cyan?
+    'b': 'dark blue',  # or light blue?
+    'm': 'dark magenta',  # or light magenta?
+    'c': 'dark cyan',  # or light cyan?
     'w': 'white',
     'd': 'default',
-    }
+}
 
 # Add our keys to the urwid command_map
 
@@ -113,7 +114,6 @@ else:
             # TODO: deal with encoding issues here...
             self.repl.main_loop.process_input(line)
             self.repl.main_loop.process_input(['enter'])
-
 
     class EvalFactory(protocol.ServerFactory):
 
@@ -140,6 +140,7 @@ if urwid.VERSION < (1, 0, 0) and hasattr(urwid, 'TwistedEventLoop'):
         the default resolver is the ThreadedResolver, so if we looked up
         any names we hang on exit. That is bad enough that we hack up
         urwid a bit here to exit properly.
+
         """
 
         def handle_exit(self, f):
@@ -162,10 +163,13 @@ else:
 
 
 class StatusbarEdit(urwid.Edit):
+
     """Wrapper around urwid.Edit used for the prompt in Statusbar.
 
-    This class only adds a single signal that is emitted if the user presses
-    Enter."""
+    This class only adds a single signal that is emitted if the user
+    presses Enter.
+
+    """
 
     signals = urwid.Edit.signals + ['prompt_enter']
 
@@ -182,6 +186,7 @@ class StatusbarEdit(urwid.Edit):
             return urwid.Edit.keypress(self, size, key)
 
 urwid.register_signal(StatusbarEdit, 'prompt_enter')
+
 
 class Statusbar(object):
 
@@ -201,6 +206,7 @@ class Statusbar(object):
         foo = Statusbar()
 
     The "widget" attribute is an urwid widget.
+
     """
 
     signals = ['prompt_result']
@@ -221,7 +227,8 @@ class Statusbar(object):
         self.widget = urwid.Columns([self.text, self.edit])
 
     def _check(self, callback, userdata=None):
-        """This is the method is called from the timer to reset the status bar."""
+        """This is the method is called from the timer to reset the status
+        bar."""
         self.timer = None
         self.settext(self.s)
 
@@ -239,10 +246,13 @@ class Statusbar(object):
             self.timer = None
 
     def prompt(self, s=None, single=False):
-        """Prompt the user for some input (with the optional prompt 's'). After
-        the user hit enter the signal 'prompt_result' will be emited and the
-        status bar will be reset. If single is True, the first keypress will be
-        returned."""
+        """Prompt the user for some input (with the optional prompt 's').
+
+        After the user hit enter the signal 'prompt_result' will be
+        emited and the status bar will be reset. If single is True, the
+        first keypress will be returned.
+
+        """
 
         self._reset_timer()
 
@@ -257,9 +267,12 @@ class Statusbar(object):
         self.widget.set_focus_column(0)
 
     def settext(self, s, permanent=False):
-        """Set the text on the status bar to a new value. If permanent is True,
-        the new value will be permanent. If that status bar is in prompt mode,
-        the prompt will be aborted. """
+        """Set the text on the status bar to a new value.
+
+        If permanent is True, the new value will be permanent. If that
+        status bar is in prompt mode, the prompt will be aborted.
+
+        """
 
         self._reset_timer()
 
@@ -271,7 +284,7 @@ class Statusbar(object):
 
         self.text.set_text(('main', s))
         if permanent:
-          self.s = s
+            self.s = s
 
     def clear(self):
         """Clear the status bar."""
@@ -288,7 +301,7 @@ urwid.register_signal(Statusbar, 'prompt_result')
 
 def decoding_input_filter(keys, raw):
     """Input filter for urwid which decodes each key with the locale's
-    preferred encoding.'"""
+    preferred encoding.'."""
     encoding = locale.getpreferredencoding()
     converted_keys = list()
     for key in keys:
@@ -297,6 +310,7 @@ def decoding_input_filter(keys, raw):
         else:
             converted_keys.append(key)
     return converted_keys
+
 
 def format_tokens(tokensource):
     for token, text in tokensource:
@@ -346,7 +360,7 @@ class BPythonEdit(urwid.Edit):
 
     def set_edit_pos(self, pos):
         urwid.Edit.set_edit_pos(self, pos)
-        self._emit("edit-pos-changed", self.edit_pos)
+        self._emit('edit-pos-changed', self.edit_pos)
 
     def get_edit_pos(self):
         return self._edit_pos
@@ -365,7 +379,9 @@ class BPythonEdit(urwid.Edit):
     def set_edit_markup(self, markup):
         """Call this when markup changes but the underlying text does not.
 
-        You should arrange for this to be called from the 'change' signal.
+        You should arrange for this to be called from the 'change'
+        signal.
+
         """
         if markup:
             self._bpy_text, self._bpy_attr = urwid.decompose_tagmarkup(markup)
@@ -460,14 +476,16 @@ class BPythonEdit(urwid.Edit):
         finally:
             self._bpy_may_move_cursor = False
 
+
 class BPythonListBox(urwid.ListBox):
-    """Like `urwid.ListBox`, except that it does not eat up and
-    down keys.
-    """
+
+    """Like `urwid.ListBox`, except that it does not eat up and down keys."""
+
     def keypress(self, size, key):
-        if key not in ["up", "down"]:
+        if key not in ['up', 'down']:
             return urwid.ListBox.keypress(self, size, key)
         return key
+
 
 class Tooltip(urwid.BoxWidget):
 
@@ -480,6 +498,7 @@ class Tooltip(urwid.BoxWidget):
 
     It also positions the top window relative to the cursor position
     from the bottom window and hides it if there is no cursor.
+
     """
 
     def __init__(self, bottom_w, listbox):
@@ -550,7 +569,9 @@ class Tooltip(urwid.BoxWidget):
         canvas.cursor = cursor
         return canvas
 
+
 class URWIDInteraction(repl.Interaction):
+
     def __init__(self, config, statusbar, frame):
         repl.Interaction.__init__(self, config, statusbar)
         self.frame = frame
@@ -558,7 +579,7 @@ class URWIDInteraction(repl.Interaction):
         self.callback = None
 
     def confirm(self, q, callback):
-        """Ask for yes or no and call callback to return the result"""
+        """Ask for yes or no and call callback to return the result."""
 
         def callback_wrapper(result):
             callback(result.lower() in (_('y'), _('yes')))
@@ -569,9 +590,13 @@ class URWIDInteraction(repl.Interaction):
         return self.statusbar.message(s, n)
 
     def prompt(self, s, callback=None, single=False):
-        """Prompt the user for input. The result will be returned via calling
-        callback. Note that there can only be one prompt active. But the
-        callback can already start a new prompt."""
+        """Prompt the user for input.
+
+        The result will be returned via calling callback. Note that
+        there can only be one prompt active. But the callback can
+        already start a new prompt.
+
+        """
 
         if self.callback is not None:
             raise Exception('Prompt already in progress')
@@ -592,7 +617,7 @@ class URWIDInteraction(repl.Interaction):
 
 class URWIDRepl(repl.Repl):
 
-    _time_between_redraws = .05 # seconds
+    _time_between_redraws = .05  # seconds
 
     def __init__(self, event_loop, palette, interpreter, config):
         repl.Repl.__init__(self, interpreter, config)
@@ -623,12 +648,15 @@ class URWIDRepl(repl.Repl):
 
         # String is straight from bpython.cli
         self.statusbar = Statusbar(config,
-            _(" <%s> Rewind  <%s> Save  <%s> Pastebin "
-              " <%s> Pager  <%s> Show Source ") %
-              (config.undo_key, config.save_key, config.pastebin_key,
-               config.last_output_key, config.show_source_key), self.main_loop)
+                                   _(' <%s> Rewind  <%s> Save  <%s> Pastebin '
+                                     ' <%s> Pager  <%s> Show Source ') %
+                                  (config.undo_key, config.save_key, config.pastebin_key,
+                                   config.last_output_key, config.show_source_key), self.main_loop)
         self.frame.set_footer(self.statusbar.widget)
-        self.interact = URWIDInteraction(self.config, self.statusbar, self.frame)
+        self.interact = URWIDInteraction(
+            self.config,
+            self.statusbar,
+            self.frame)
 
         self.edits = []
         self.edit = None
@@ -848,7 +876,7 @@ class URWIDRepl(repl.Repl):
         return self.stdout_hist + '\n'
 
     def ask_confirmation(self, q):
-        """Ask for yes or no and return boolean"""
+        """Ask for yes or no and return boolean."""
         try:
             reply = self.statusbar.prompt(q)
         except ValueError:
@@ -875,7 +903,8 @@ class URWIDRepl(repl.Repl):
             if py3:
                 self.stdout_hist += line + '\n'
             else:
-                self.stdout_hist += line.encode(locale.getpreferredencoding()) + '\n'
+                self.stdout_hist += line.encode(
+                    locale.getpreferredencoding()) + '\n'
             self.print_line(line)
             self.s_hist[-1] += self.f_string
             # I decided it was easier to just do this manually
@@ -899,7 +928,7 @@ class URWIDRepl(repl.Repl):
         #^-- That's how simple this method was at first :(
 
     def write(self, s):
-        """For overriding stdout defaults"""
+        """For overriding stdout defaults."""
         if '\x04' in s:
             for block in s.split('\x04'):
                 self.write(block)
@@ -919,7 +948,6 @@ class URWIDRepl(repl.Repl):
 
         self.echo(s)
         self.s_hist.append(s.rstrip())
-
 
     def push(self, s, insert_into_history=True):
         # Restore the original SIGINT handler. This is needed to be able
@@ -1009,8 +1037,11 @@ class URWIDRepl(repl.Repl):
 
     def on_edit_pos_changed(self, edit, position):
         """Gets called when the cursor position inside the edit changed.
-        Rehighlight the current line because there might be a paren under
-        the cursor now."""
+
+        Rehighlight the current line because there might be a paren
+        under the cursor now.
+
+        """
         tokens = self.tokenize(self.current_line(), False)
         edit.set_edit_markup(list(format_tokens(tokens)))
 
@@ -1025,7 +1056,8 @@ class URWIDRepl(repl.Repl):
             self.history.append(inp)
             self.edit.make_readonly()
             # XXX what is this s_hist thing?
-            self.stdout_hist += inp.encode(locale.getpreferredencoding()) + '\n'
+            self.stdout_hist += inp.encode(
+                locale.getpreferredencoding()) + '\n'
             self.edit = None
             # This may take a while, so force a redraw first:
             self.main_loop.draw_screen()
@@ -1052,7 +1084,7 @@ class URWIDRepl(repl.Repl):
             self.tab()
         elif urwid.command_map[event] == 'prev selectable':
             self.tab(True)
-        #else:
+        # else:
         #    self.echo(repr(event))
 
     def tab(self, back=False):
@@ -1066,6 +1098,7 @@ class URWIDRepl(repl.Repl):
         instead of indenting.
 
         Returns True if the key was handled.
+
         """
         self._completion_update_suppressed = True
         try:
@@ -1115,25 +1148,28 @@ class URWIDRepl(repl.Repl):
         finally:
             self._completion_update_suppressed = False
 
+
 def main(args=None, locals_=None, banner=None):
     translations.init()
 
     # TODO: maybe support displays other than raw_display?
     config, options, exec_args = bpargs.parse(args, (
-            'Urwid options', None, [
-                Option('--twisted', '-T', action='store_true',
-                       help=_('Run twisted reactor.')),
-                Option('--reactor', '-r',
-                       help=_('Select specific reactor (see --help-reactors). '
-                       'Implies --twisted.')),
-                Option('--help-reactors', action='store_true',
-                       help=_('List available reactors for -r.')),
-                Option('--plugin', '-p',
-                       help=_('twistd plugin to run (use twistd for a list). '
-                       'Use "--" to pass further options to the plugin.')),
-                Option('--server', '-s', type='int',
-                       help=_('Port to run an eval server on (forces Twisted).')),
-                ]))
+        'Urwid options', None, [
+            Option('--twisted', '-T', action='store_true',
+                                             help=_('Run twisted reactor.')),
+            Option('--reactor', '-r',
+                   help=_('Select specific reactor (see --help-reactors). '
+                          'Implies --twisted.')),
+            Option('--help-reactors', action='store_true',
+                                             help=_(
+                                                 'List available reactors for -r.')),
+            Option('--plugin', '-p',
+                   help=_('twistd plugin to run (use twistd for a list). '
+                          'Use "--" to pass further options to the plugin.')),
+            Option('--server', '-s', type='int',
+                   help=_(
+                       'Port to run an eval server on (forces Twisted).')),
+        ]))
 
     if options.help_reactors:
         try:
@@ -1143,7 +1179,7 @@ def main(args=None, locals_=None, banner=None):
                 print('    %-4s\t%s' % (r.shortName, r.description))
         except ImportError:
             sys.stderr.write('No reactors are available. Please install '
-                'twisted for reactor support.\n')
+                             'twisted for reactor support.\n')
         return
 
     palette = [
@@ -1151,8 +1187,8 @@ def main(args=None, locals_=None, banner=None):
          'bold' if color.isupper() else 'default')
         for name, color in config.color_scheme.items()]
     palette.extend([
-            ('bold ' + name, color + ',bold', background, monochrome)
-            for name, color, background, monochrome in palette])
+        ('bold ' + name, color + ',bold', background, monochrome)
+        for name, color, background, monochrome in palette])
 
     if options.server or options.plugin:
         options.twisted = True
@@ -1162,7 +1198,7 @@ def main(args=None, locals_=None, banner=None):
             from twisted.application import reactors
         except ImportError:
             sys.stderr.write('No reactors are available. Please install '
-                'twisted for reactor support.\n')
+                             'twisted for reactor support.\n')
             return
         try:
             # XXX why does this not just return the reactor it installed?
@@ -1171,7 +1207,7 @@ def main(args=None, locals_=None, banner=None):
                 from twisted.internet import reactor
         except reactors.NoSuchReactor:
             sys.stderr.write('Reactor %s does not exist\n' % (
-                    options.reactor,))
+                options.reactor,))
             return
         event_loop = TwistedEventLoop(reactor)
     elif options.twisted:
@@ -1179,7 +1215,7 @@ def main(args=None, locals_=None, banner=None):
             from twisted.internet import reactor
         except ImportError:
             sys.stderr.write('No reactors are available. Please install '
-                'twisted for reactor support.\n')
+                             'twisted for reactor support.\n')
             return
         event_loop = TwistedEventLoop(reactor)
     else:
@@ -1199,7 +1235,7 @@ def main(args=None, locals_=None, banner=None):
             from twisted.application import service
         except ImportError:
             sys.stderr.write('No twisted plugins are available. Please install '
-                'twisted for twisted plugin support.\n')
+                             'twisted for twisted plugin support.\n')
             return
 
         for plug in plugin.getPlugins(service.IServiceMaker):
@@ -1241,6 +1277,7 @@ def main(args=None, locals_=None, banner=None):
     # are called before we get around to starting the mainloop
     # (urwid raises an exception if we try to draw to the screen
     # before starting it).
+
     def run_with_screen_before_mainloop():
         try:
             # Currently we just set this to None because I do not
@@ -1253,7 +1290,7 @@ def main(args=None, locals_=None, banner=None):
             # cannot re-enter the reactor. If using urwid's own
             # mainloop we *might* be able to do something similar and
             # re-enter its mainloop.
-            sys.stdin = None #FakeStdin(myrepl)
+            sys.stdin = None  # FakeStdin(myrepl)
             sys.stdout = myrepl
             sys.stderr = myrepl
 
@@ -1314,9 +1351,10 @@ def main(args=None, locals_=None, banner=None):
 
     if config.flush_output and not options.quiet:
         sys.stdout.write(myrepl.getstdout())
-    if hasattr(sys.stdout, "flush"):
+    if hasattr(sys.stdout, 'flush'):
         sys.stdout.flush()
     return repl.extract_exit_value(myrepl.exit_value)
+
 
 def load_urwid_command_map(config):
     urwid.command_map[key_dispatch[config.up_one_line_key]] = 'cursor up'

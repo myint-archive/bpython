@@ -10,6 +10,8 @@ except ImportError:
         return lambda self: None
 
 from bpython import config, repl, cli, autocomplete
+from bpython._py3compat import py3
+
 
 def setup_config(conf):
     config_struct = config.Struct()
@@ -282,7 +284,9 @@ class TestRepl(unittest.TestCase):
 
         self.assertTrue(self.repl.complete())
         self.assertTrue(hasattr(self.repl.completer,'matches'))
-        self.assertEqual(self.repl.completer.matches,
+        self.assertEqual(
+            self.repl.completer.matches,
+            ['ChildProcessError(', 'UnboundLocalError(', '__doc__'] if py3 else
             ['UnboundLocalError(', '__doc__'])
 
     # 2. Attribute tests

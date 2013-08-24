@@ -264,12 +264,6 @@ class History(object):
         if self.index == 0:
             self.saved_line = line
 
-    @classmethod
-    def from_filename(cls, filename):
-        history = cls()
-        history.load(filename)
-        return history
-
     def load(self, filename, encoding):
         with codecs.open(filename, 'r', encoding, 'ignore') as hfile:
             for line in hfile:
@@ -1046,20 +1040,6 @@ def next_indentation(line, tab_length):
         if line.lstrip().startswith(('return', 'pass', 'raise', 'yield')):
             indentation -= 1
     return indentation
-
-
-def next_token_inside_string(s, inside_string):
-    """Given a code string s and an initial state inside_string, return whether
-    the next token will be inside a string or not."""
-    for token, value in PythonLexer().get_tokens(s):
-        if token is Token.String:
-            value = value.lstrip('bBrRuU')
-            if value in ['"""', "'''", '"', "'"]:
-                if not inside_string:
-                    inside_string = value
-                elif value == inside_string:
-                    inside_string = False
-    return inside_string
 
 
 def split_lines(tokens):

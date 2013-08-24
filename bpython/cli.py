@@ -110,21 +110,6 @@ def getpreferredencoding():
     return locale.getpreferredencoding() or sys.getdefaultencoding()
 
 
-def calculate_screen_lines(tokens, width, cursor=0):
-    """Given a stream of tokens and a screen width plus an optional initial
-    cursor position, return the amount of needed lines on the screen."""
-    lines = 1
-    pos = cursor
-    for (token, value) in tokens:
-        if token is Token.Text and value == '\n':
-            lines += 1
-        else:
-            pos += len(value)
-            lines += pos // width
-            pos %= width
-    return lines
-
-
 class FakeStream(object):
 
     """Provide a fake file object which calls functions on the interface

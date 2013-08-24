@@ -12,4 +12,3 @@ file does not exist bpython will use its documented defaults.
 .. [#f1] ``$XDG_CONFIG_HOME`` defaults to ``~/.config`` if not set.
 
 .. include:: configuration-options.rst
-

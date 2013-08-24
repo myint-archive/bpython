@@ -66,7 +66,7 @@ The default theme included in bpython is as follows:
   punctuation = y
   token = C
   paren = R
-  
+
   [interface]
   # XXX: gnome-terminal appears to be braindead. The cursor will disappear unless
   # you set the background colour to "d".
@@ -75,4 +75,3 @@ The default theme included in bpython is as follows:
   main = c
   prompt = c
   prompt_more = g
-

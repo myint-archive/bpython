@@ -111,7 +111,7 @@ v0.9.6.2
 Unfortunately another bugfix release as I (Bob) broke py3 support.
 
 * #84: bpython doesn't work with Python 3
-       Thanks very much to Henry Prêcheur for both the bug report and the 
+       Thanks very much to Henry Prêcheur for both the bug report and the
        patch.
 
 v0.9.6.1
@@ -124,21 +124,21 @@ v0.9.6
 ------
 A bugfix/feature release (and a start at gtk). Happy Christmas everyone!
 
-* #67: Make pastebin URL really configurable. 
+* #67: Make pastebin URL really configurable.
 * #68: Set a__main__ module and set interpreter's namespace to that module.
-* #70: Implement backward completion on backward tab. 
+* #70: Implement backward completion on backward tab.
 * #62: Hide matches starting with a _ unless explicitly typed.
 * #72: Auto dedentation
 * #78: Theme without a certain value raises exception
 
 - add the possibility for a banner to be shown on bpython startup (when embedded or in code) written by Caio Ramao.
 - add a hack to add a write() method to our fake stdin object
-- Don't use curses interface when stdout is not attached to a terminal. 
+- Don't use curses interface when stdout is not attached to a terminal.
 - PEP-8 conformance.
-- Only restore indentation when inside a block. 
-- Do not decrease the lineno in tracebacks for Py3 
-- Do not add internal code to history. 
-- Make paren highlighting more accurate. 
+- Only restore indentation when inside a block.
+- Do not decrease the lineno in tracebacks for Py3
+- Do not add internal code to history.
+- Make paren highlighting more accurate.
 - Catch SyntaxError in import completion.
 - Remove globals for configuration.
 - rl_history now stays the same, also after undo.
@@ -184,10 +184,10 @@ in Debian's bugtracker.
 bpython has now some basic support for Python 3 (requires Pygments >=1.1.1).
 As a result, setuptools is now optional.
 
-The pastebin URL is now configurable and the default pastebin is now 
+The pastebin URL is now configurable and the default pastebin is now
 bpaste.net
 
-Argument names are now shown as completion suggestions and one can 
+Argument names are now shown as completion suggestions and one can
 tab through the completion list.
 
 v0.9.4
@@ -408,7 +408,7 @@ happens (rather, it avoids letting something horrible happen).
 
 I decided to add a key that will get rid of the autocomplete window,
 since it can get in the way. C-l seemed like a good choice, since
-it would work well as a side-effect of redrawing the screen (at 
+it would work well as a side-effect of redrawing the screen (at
 least that makes sense to me). In so doing I also cleaned up a lot
 of the reevaluating and resizing code so that a lot of the strange
 output seen on Rewind/resize seems to be gone.

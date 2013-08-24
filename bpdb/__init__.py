@@ -109,4 +109,3 @@ def main():
             pdb.interaction(None, t)
             print("Post mortem debugger finished. The " + mainpyfile + \
                   " will be restarted")
-

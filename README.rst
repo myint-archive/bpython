@@ -138,5 +138,3 @@ To correct this I have provided my windows.theme file.
 
 This curses implementation has 16 colors (dark and light versions of the
 colours)
-
-

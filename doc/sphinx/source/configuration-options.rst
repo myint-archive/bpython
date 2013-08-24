@@ -121,7 +121,7 @@ Color schemes should be put in ``$XDG_CONFIG_HOME/bpython/``
 
 e.g to use the theme ``$XDG_CONFIG_HOME/bpython/foo.theme`` set ``color_scheme = foo``
 
-If you set the colorscheme to `foo` this will be translated to 
+If you set the colorscheme to `foo` this will be translated to
 ``$XDG_CONFIG_HOME/bpython/foo.theme`` so be sure to put the file in that directory.
 
 Leave blank or set to "default" to use the default (builtin) theme.
@@ -258,4 +258,3 @@ font
 Default: Monospace 10
 
 The font to be used by the GTK version.
-

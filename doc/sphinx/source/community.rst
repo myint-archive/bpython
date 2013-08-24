@@ -4,7 +4,7 @@ Community
 =========
 Do you need help with using bpython? Do you want to thank the contributors
 personally? Or maybe you want to help out, contribute some code or resources
-or want to help in making bpython known to other persons? 
+or want to help in making bpython known to other persons?
 
 These are the places where you can find us.
 

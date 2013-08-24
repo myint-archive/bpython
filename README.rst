@@ -1,6 +1,10 @@
 bpython - A fancy curses interface to the Python interactive interpreter
 ========================================================================
 
+.. image:: https://travis-ci.org/myint/bpython.png?branch=master
+   :target: https://travis-ci.org/myint/bpython
+   :alt: Build status
+
 Dependencies
 ============
 Pygments

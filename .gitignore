@@ -1,0 +1,11 @@
+*.egg
+*.pyc
+.DS_Store
+.idea/
+.mo
+_trial_temp
+bpython.egg-info/*
+build/*
+dist/*
+env
+tags

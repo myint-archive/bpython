@@ -202,9 +202,6 @@ class SuggestionWindow(gtk.Window):
         self.docstring_label = gtk.Label()
         self.docstring_label.set_alignment(0, 0)
         style = self.docstring_label.get_style()
-        #color = _COLORS[self.config.color_scheme['comment'].lower()]
-        #color = gtk.gdk.color_parse(color)
-        #style.fg[gtk.STATE_NORMAL] = color
         self.docstring_label.set_style(style)
         vbox.pack_start(self.docstring_label, expand=False)
 

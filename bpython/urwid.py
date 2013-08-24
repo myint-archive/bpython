@@ -924,8 +924,6 @@ class URWIDRepl(repl.Repl):
                 self.tab()
 
         self.evaluating = False
-        #map(self.push, self.history)
-        #^-- That's how simple this method was at first :(
 
     def write(self, s):
         """For overriding stdout defaults."""

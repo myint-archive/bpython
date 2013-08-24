@@ -38,12 +38,13 @@ __version__ = bpython.__version__
 
 
 def set_trace():
-    """ Just like pdb.set_trace(), a helper function that creates
-    a debugger instance and sets the trace. """
+    """Just like pdb.set_trace(), a helper function that creates a debugger
+    instance and sets the trace."""
     debugger = BPdb()
     debugger.set_trace(sys._getframe().f_back)
 
 # Adopted verbatim from pdb for completeness:
+
 
 def post_mortem(t=None):
     # handling the default
@@ -52,15 +53,17 @@ def post_mortem(t=None):
         # being handled, otherwise it returns None
         t = sys.exc_info()[2]
         if t is None:
-            raise ValueError("A valid traceback must be passed if no "
-                             "exception is being handled")
+            raise ValueError('A valid traceback must be passed if no '
+                             'exception is being handled')
 
     p = BPdb()
     p.reset()
     p.interaction(None, t)
 
+
 def pm():
-    post_mortem(getattr(sys, "last_traceback", None))
+    post_mortem(getattr(sys, 'last_traceback', None))
+
 
 def main():
     parser = OptionParser(
@@ -71,8 +74,8 @@ def main():
     if options.version:
         print('bpdb on top of bpython version', __version__, end=' ')
         print('on top of Python', sys.version.split()[0])
-        print ('(C) 2008-2013 Bob Farrell, Andreas Stuehrk et al. '
-               'See AUTHORS for detail.')
+        print('(C) 2008-2013 Bob Farrell, Andreas Stuehrk et al. '
+              'See AUTHORS for detail.')
         return 0
 
     # The following code is baed on Python's pdb.py.
@@ -93,19 +96,19 @@ def main():
             pdb._runscript(mainpyfile)
             if pdb._user_requested_quit:
                 break
-            print("The program finished and will be restarted")
+            print('The program finished and will be restarted')
         except Restart:
-            print("Restarting", mainpyfile, "with arguments:")
-            print("\t" + " ".join(sys.argv[1:]))
+            print('Restarting', mainpyfile, 'with arguments:')
+            print('\t' + ' '.join(sys.argv[1:]))
         except SystemExit:
             # In most cases SystemExit does not warrant a post-mortem session.
-            print("The program exited via sys.exit(). Exit status: ", end=' ')
+            print('The program exited via sys.exit(). Exit status: ', end=' ')
             print(sys.exc_info()[1])
         except:
             traceback.print_exc()
-            print("Uncaught exception. Entering post mortem debugging")
+            print('Uncaught exception. Entering post mortem debugging')
             print("Running 'cont' or 'step' will restart the program")
             t = sys.exc_info()[2]
             pdb.interaction(None, t)
-            print("Post mortem debugger finished. The " + mainpyfile + \
-                  " will be restarted")
+            print('Post mortem debugger finished. The ' + mainpyfile +
+                  ' will be restarted')

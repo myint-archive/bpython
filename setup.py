@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 
-
 from __future__ import absolute_import
 import os
 import platform
@@ -43,7 +42,9 @@ try:
 except ImportError:
     using_sphinx = False
 
+
 class install(_install):
+
     """Force install to run build target."""
 
     def run(self):
@@ -56,6 +57,7 @@ translations_dir = os.path.join(package_dir, 'translations')
 # localization options
 if using_translations:
     class compile_catalog(_compile_catalog):
+
         def initialize_options(self):
             """Simply set default domain and directory attributes to the
             correct path for bpython."""
@@ -66,6 +68,7 @@ if using_translations:
             self.use_fuzzy = True
 
     class update_catalog(_update_catalog):
+
         def initialize_options(self):
             """Simply set default domain and directory attributes to the
             correct path for bpython."""
@@ -76,6 +79,7 @@ if using_translations:
             self.input_file = os.path.join(translations_dir, 'bpython.pot')
 
     class extract_messages(_extract_messages):
+
         def initialize_options(self):
             """Simply set default domain and output file attributes to the
             correct values for bpython."""
@@ -85,6 +89,7 @@ if using_translations:
             self.output_file = os.path.join(translations_dir, 'bpython.pot')
 
     class init_catalog(_init_catalog):
+
         def initialize_options(self):
             """Simply set default domain, input file and output directory
             attributes to the correct values for bpython."""
@@ -103,6 +108,7 @@ if using_translations:
 
 if using_sphinx:
     class BuildDocMan(BuildDoc):
+
         def initialize_options(self):
             BuildDoc.initialize_options(self)
             self.builder = 'man'
@@ -139,38 +145,38 @@ for language in os.listdir(translations_dir):
         mo_files.append(mo_subpath)
 
 setup(
-    name="bpython",
-    version = __version__,
-    author = "Bob Farrell, Andreas Stuehrk et al.",
-    author_email = "robertanthonyfarrell@gmail.com",
-    description = "Fancy Interface to the Python Interpreter",
-    license = "MIT/X",
-    url = "http://www.bpython-interpreter.org/",
-    long_description = """bpython is a fancy interface to the Python
+    name='bpython',
+    version=__version__,
+    author='Bob Farrell, Andreas Stuehrk et al.',
+    author_email='robertanthonyfarrell@gmail.com',
+    description='Fancy Interface to the Python Interpreter',
+    license='MIT/X',
+    url='http://www.bpython-interpreter.org/',
+    long_description="""bpython is a fancy interface to the Python
     interpreter for Unix-like operating systems.""",
-    install_requires = [
+    install_requires=[
         'pygments'
     ],
-    tests_require = ['mock'],
-    packages = ["bpython", "bpython.test", "bpython.translations", "bpdb"],
-    data_files = data_files,
-    package_data = {
+    tests_require=['mock'],
+    packages=['bpython', 'bpython.test', 'bpython.translations', 'bpdb'],
+    data_files=data_files,
+    package_data={
         'bpython': ['logo.png'],
         'bpython.translations': mo_files,
         'bpython.test': ['test.config', 'test.theme']
     },
-    entry_points = {
+    entry_points={
         'console_scripts': [
             'bpython = bpython.cli:main',
             'bpython-urwid = bpython.urwid:main',
         ],
         'gui_scripts': [
             'bpython-gtk = bpython.gtk_:main'
-         ]
+        ]
     },
-    scripts = ([] if using_setuptools else ['data/bpython',
-                                            'data/bpython-gtk',
-                                            'data/bpython-urwid']),
+    scripts=([] if using_setuptools else ['data/bpython',
+                                          'data/bpython-gtk',
+                                          'data/bpython-urwid']),
     cmdclass = cmdclass,
     test_suite = 'bpython.test'
 )

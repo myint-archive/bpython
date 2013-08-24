@@ -1084,8 +1084,6 @@ class URWIDRepl(repl.Repl):
             self.tab()
         elif urwid.command_map[event] == 'prev selectable':
             self.tab(True)
-        # else:
-        #    self.echo(repr(event))
 
     def tab(self, back=False):
         """Process the tab key being hit.

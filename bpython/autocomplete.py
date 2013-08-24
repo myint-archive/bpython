@@ -127,8 +127,7 @@ class Autocomplete(rlcompleter.Completer):
                 if self.method_match(word, len(text), text) and word != "__builtins__":
                     hash[self._callable_postfix(val, word)] = 1
         matches = hash.keys()
-        matches.sort()
-        return matches
+        return sorted(matches)
 
     def method_match(self, word, size, text):
         if self.autocomplete_mode == SIMPLE:

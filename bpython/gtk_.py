@@ -47,6 +47,12 @@ from bpython.translations import _
 import bpython.args
 
 
+try:
+    unicode
+except NameError:
+    unicode = str
+
+
 _COLORS = dict(b='blue', c='cyan', g='green', m='magenta', r='red',
                w='white', y='yellow', k='black', d='black')
 
@@ -491,7 +497,6 @@ class ReplWidget(gtk.TextView, repl.Repl):
                     self.list_win_visible = False
                     self.list_win.hide()
                 self.rl_history.reset()
-                line = self.current_line()
                 more = self.push_line()
                 self.prompt(more)
                 if self.reset_indent:

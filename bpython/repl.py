@@ -514,8 +514,8 @@ class Repl(object):
                     stack[-1][0] = ''
             while stack[-1][2] in '[{':
                 stack.pop()
-            _, arg_number, _ = stack.pop()
-            func, _, _ = stack.pop()
+            arg_number = stack.pop()[1]
+            func = stack.pop()[0]
         except IndexError:
             return False
         if not func:

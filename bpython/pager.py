@@ -31,6 +31,12 @@ import subprocess
 import sys
 
 
+try:
+    unicode
+except NameError:
+    unicode = str
+
+
 def get_pager_command():
     command = os.environ.get('PAGER', 'less -r').split()
     return command

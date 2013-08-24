@@ -45,6 +45,13 @@ except ImportError:
 
 from bpython._py3compat import py3
 
+
+try:
+    unicode
+except NameError:
+    unicode = str
+
+
 # The cached list of all known modules
 modules = set()
 fully_loaded = False

@@ -1256,7 +1256,7 @@ class CLIRepl(repl.Repl):
         shared.cols = 0
         shared.rows = 0
         shared.wl = 0
-        y, x = self.scr.getyx()
+        y = self.scr.getyx()[0]
         h, w = self.scr.getmaxyx()
         down = (y < h // 2)
         if down:

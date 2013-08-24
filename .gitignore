@@ -1,4 +1,6 @@
 .*.swp
+.build-*/
+.travis-solo/
 *.egg
 *.pyc
 .DS_Store

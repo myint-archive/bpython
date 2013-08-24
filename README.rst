@@ -125,14 +125,15 @@ It can be obtained from cygwin or GnuWin32 or msys
 
 Current version is tested with
 ------------------------------
- * Curses 2.2
- * pyreadline 1.7
+- Curses 2.2
+- pyreadline 1.7
 
 Curses Notes
 ------------
 The curses used has a bug where the colours are displayed incorrectly:
- * red  is swapped with blue
- * cyan is swapped with yellow
+
+- red  is swapped with blue
+- cyan is swapped with yellow
 
 To correct this I have provided my windows.theme file.
 

@@ -87,7 +87,7 @@ class CrashersTest(object):
         input = textwrap.dedent(
             """\
             def spam():
-            u"y\\xe4y"
+            'y\\xe4y'
             \b
             spam(""")
         deferred = self.run_bpython(input)

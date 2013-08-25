@@ -1,5 +1,7 @@
 from __future__ import absolute_import
+
 import os
+import sys
 import unittest
 from itertools import islice
 from mock import Mock
@@ -10,7 +12,6 @@ except ImportError:
         return lambda self: None
 
 from bpython import config, repl, cli, autocomplete
-from bpython._py3compat import py3
 
 
 def setup_config(conf):
@@ -296,7 +297,8 @@ class TestRepl(unittest.TestCase):
         self.assertTrue(hasattr(self.repl.completer, 'matches'))
         self.assertEqual(
             self.repl.completer.matches,
-            ['ChildProcessError(', 'UnboundLocalError(', '__doc__'] if py3 else
+            ['ChildProcessError(', 'UnboundLocalError(', '__doc__']
+            if sys.version_info >= (3, 3) else
             ['UnboundLocalError(', '__doc__'])
 
     # 2. Attribute tests

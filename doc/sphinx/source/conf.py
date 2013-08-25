@@ -39,8 +39,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'bpython'
-copyright = u'2008-2012 Bob Farrell, Andreas Stuehrk et al.'
+project = 'bpython'
+copyright = '2008-2012 Bob Farrell, Andreas Stuehrk et al.'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -174,8 +174,8 @@ htmlhelp_basename = 'bpythondoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'bpython.tex', u'bpython Documentation',
-   u'Robert Farrell', 'manual'),
+  ('index', 'bpython.tex', 'bpython Documentation',
+   'Robert Farrell', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -201,10 +201,10 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('man-bpython', 'bpython',
-     u'a fancy {curses, GTK+, urwid} interface to the Python interactive interpreter',
+     'a fancy {curses, GTK+, urwid} interface to the Python interactive interpreter',
      [], 1),
     ('man-bpython-config', 'bpython-config',
-     u'user configuration file for bpython',
+     'user configuration file for bpython',
      [], 5)
 ]
 

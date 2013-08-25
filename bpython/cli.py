@@ -66,7 +66,6 @@ from types import ModuleType
 from pygments import format
 from pygments.formatters import TerminalFormatter
 from pygments.lexers import PythonLexer
-from pygments.token import Token
 from bpython.formatter import BPythonFormatter
 
 # This for completion

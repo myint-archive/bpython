@@ -646,12 +646,19 @@ class URWIDRepl(repl.Repl):
             event_loop=event_loop, unhandled_input=self.handle_input,
             input_filter=input_filter, handle_mouse=False)
 
+        menu_string = ''
+        for name, key in (
+            ('Rewind', config.undo_key),
+            ('Save', config.save_key),
+            ('Pastebin', config.pastebin_key),
+            ('Pager', config.last_output_key),
+            ('Show Source', config.show_source_key)
+        ):
+            if key:
+                menu_string += ' <%s> %s ' % (key, name)
+
         # String is straight from bpython.cli
-        self.statusbar = Statusbar(config,
-                                   _(' <%s> Rewind  <%s> Save  <%s> Pastebin '
-                                     ' <%s> Pager  <%s> Show Source ') %
-                                  (config.undo_key, config.save_key, config.pastebin_key,
-                                   config.last_output_key, config.show_source_key), self.main_loop)
+        self.statusbar = Statusbar(config, menu_string, self.main_loop)
         self.frame.set_footer(self.statusbar.widget)
         self.interact = URWIDInteraction(
             self.config,
